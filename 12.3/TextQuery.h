@@ -7,7 +7,7 @@
 #include<memory>
 #include<fstream>
 #include<sstream>
-#include"StrBlob.h"
+#include"StrBlob.h" 
 using namespace std;
 
 class QueryResult;
