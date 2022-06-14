@@ -8,6 +8,8 @@
 #include<fstream>
 #include<sstream>
 #include"StrBlob.h" 
+#include"StrVec.h"
+
 using namespace std;
 
 class QueryResult;
@@ -21,7 +23,7 @@ public:
 	void loadFile(ifstream& infile);
 	QueryResult query(const string& word) const;
 private:
-	shared_ptr<StrBlob>lineData;
+	shared_ptr<StrVec>lineData;
 	map<string, shared_ptr<set<int>>>wordMap;
 	map<string, int>wordCount;
 	ifstream* nowfile;
@@ -33,7 +35,7 @@ public:
 	string word;
 	int count;
 	shared_ptr<set<int>> resultSet;
-	shared_ptr<StrBlob> lineData;
+	shared_ptr<StrVec> lineData;
 	set<int>::iterator begin();
 	set<int>::iterator end();
 	ifstream* get_file();

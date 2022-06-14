@@ -27,11 +27,6 @@ void StrBlob::push_back(const string& s)
 	data->push_back(s);
 }
 
-void StrBlob::push_back(string&& s)
-{
-	data->push_back(std::move(s));
-}
-
 void StrBlob::pop_back()
 {
 	check(0, "empty vector can not pop");
@@ -58,7 +53,7 @@ string StrBlob::getByPos(vector<string>::size_type pos)
 {
 	check(pos, "out of vec range");
 
-	return ( * data)[pos];
+	return (*data)[pos];
 }
 
 
@@ -121,7 +116,7 @@ void StrBlobPtr::incr()
 
 string StrBlobPtr::getByPos(vector<string>::size_type pos)
 {
-	
+
 	return (*check(pos, "out of vec range"))[pos];
 }
 

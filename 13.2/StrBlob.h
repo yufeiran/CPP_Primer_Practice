@@ -1,3 +1,5 @@
+#ifndef STR_BLOB_H
+#define STR_BLOB_H
 #include<iostream>
 #include<string>
 #include<vector>
@@ -16,10 +18,19 @@ public:
 	StrBlob() :data(make_shared<vector<string>>()) {  };
 	StrBlob(initializer_list<string>s) :data(make_shared<vector<string>>(s)) {
 	}
+	StrBlob(const StrBlob& s) {
+		auto newP = make_shared<vector<string>>();
+		newP = s.data;
+		data = newP;
+	}
+	StrBlob& operator=(const StrBlob& s) {
+		auto newP = make_shared<vector<string>>();
+		newP = s.data;
+		data = newP;
+	}
 	const string back();
 	const string front();
 	void push_back(const string& s);
-	void push_back(string&& s);
 	void pop_back();
 	void clear();
 	void show();
@@ -62,3 +73,5 @@ private:
 	vector<string>::size_type curr;
 	weak_ptr<vector<string>>ptr;
 };
+
+#endif

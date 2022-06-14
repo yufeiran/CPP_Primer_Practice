@@ -6,7 +6,7 @@ void TextQuery::loadFile(ifstream& infile)
 {
 	nowfile = &infile;
 	wordMap.clear();
-	lineData = make_shared<StrBlob>();
+	lineData = make_shared<StrVec>();
 	lineData->clear();
 	string line;
 	int lineCurr = 0;
@@ -53,7 +53,7 @@ ostream& print(ostream& os, const QueryResult& q)
 	os << q.word << " occurs " << q.count <<((q.count>1)? " times":" time" )<< endl;
 
 	for (auto c : *(q.resultSet) ){
-		os << "\t" << "(line " << c << " ) " <<(*q.lineData).getByPos(c) << endl;
+		os << "\t" << "(line " << c << " ) " <<*(*q.lineData).at(c) << endl;
 	}
 	return os;
 }
