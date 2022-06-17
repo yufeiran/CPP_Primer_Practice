@@ -10,11 +10,15 @@ class StrBlob
 {
 	friend StrBlobPtr;
 	friend ConstStrBlobPtr;
+	friend bool operator==(const StrBlob& lhs, const StrBlob& rhs);
+	friend bool operator<(const StrBlob& lhs, const StrBlob& rhs);
 public:
 	using size_t = vector<string>::size_type;
 	StrBlob() :data(make_shared<vector<string>>()) {  };
 	StrBlob(initializer_list<string>s):data(make_shared<vector<string>>(s)) {
 	}
+	string& operator[](size_t n) { return (*data)[n]; }
+	const string& operator[](size_t n)const { return (*data)[n]; }
 	const string back();
 	const string front();
 	void push(const string &s);
@@ -28,6 +32,20 @@ private:
 };
 
 
+bool operator==(const StrBlob& lhs, const StrBlob& rhs)
+{
+	return (lhs.data.get() == rhs.data.get());
+}
+
+bool operator!=(const StrBlob& lhs, const StrBlob& rhs)
+{
+	return !(lhs == rhs);
+}
+
+bool operator<(const StrBlob& lhs, const StrBlob& rhs)
+{
+	return lhs.data.get() < rhs.data.get();
+}
 
 void StrBlob::check(size_t i, const string& msg) const
 {
@@ -78,14 +96,20 @@ public:
 	ConstStrBlobPtr(const StrBlob& b, vector<string>::size_type sz) :ptr(b.data), curr(sz) {};
 	const string deref() const;
 	void incr() ;
-
+	const string& operator*()const {
+		auto p = check(curr, "out of StrBlob range");
+		return (*p)[curr];
+	}
+	const string* operator->()const {
+		return &(this->operator*());
+	}
 private:
-	const shared_ptr<vector<string>> check(vector<string>::size_type sz, const string& msg) const;
+	const shared_ptr<const vector<string>> check( vector<string>::size_type sz, const string& msg) const;
 	vector<string>::size_type curr;
-	weak_ptr<vector<string>>ptr;
+	weak_ptr<const vector<string>>ptr;
 };
 
-const shared_ptr<vector<string>> ConstStrBlobPtr::check(vector<string>::size_type sz, const string& msg)const
+const shared_ptr<const vector<string>> ConstStrBlobPtr::check( vector<string>::size_type sz, const string& msg)const
 {
 	auto ret = ptr.lock();
 	if (!ret) {
@@ -114,11 +138,63 @@ void ConstStrBlobPtr::incr()
 
 class StrBlobPtr
 {
+	friend bool operator==(const StrBlobPtr& lhs, const StrBlobPtr& rhs);
+	friend bool operator<(const StrBlobPtr& lhs, const StrBlobPtr& rhs);
 public:
 	StrBlobPtr() :ptr(), curr(0) {};
 	StrBlobPtr(StrBlob& b, vector<string>::size_type sz) :ptr(b.data), curr(sz) {};
 	string deref();
 	void incr();
+	string& operator[](size_t n) { 
+		auto pvec = ptr.lock();
+		if (pvec != nullptr) {
+			return (*pvec)[n];
+		}
+	}
+	const string& operator[](size_t n)const {
+		auto pvec = ptr.lock();
+		if (pvec != nullptr) {
+			return (*pvec)[n];
+		}
+	};
+	StrBlobPtr& operator+=(const StrBlobPtr& p) {
+		check(curr + p.curr, "out of StrBlob range");
+		curr += p.curr;
+		return *this;
+	}
+	StrBlobPtr& operator-=(const StrBlobPtr& p) {
+		check(curr - p.curr, "out of StrBlob range");
+		curr -= p.curr;
+		return *this;
+	}
+	StrBlobPtr& operator++() {
+		check(curr, "out of StrBlob range");
+		curr++;
+		return *this;
+	}
+	StrBlobPtr& operator--() {
+		curr--;
+		check(curr, "out of StrBlob range");
+		return *this;
+	}
+	StrBlobPtr& operator++(int) {
+		auto ret = *this;
+		++*this;
+		return ret;
+	}
+	StrBlobPtr& operator--(int) {
+		auto ret = *this;
+		--* this;
+		return ret;
+	}
+	string& operator*() {
+		auto p=check(curr, "out of StrBlob range");
+		return (*p)[curr];
+	}
+
+	string* operator->() {
+		return &( this->operator*());
+	}
 
 private:
 	shared_ptr<vector<string>> check(vector<string>::size_type sz, const string& msg);
@@ -126,6 +202,20 @@ private:
 	weak_ptr<vector<string>>ptr;
 };
 
+bool operator==(const StrBlobPtr& lhs, const StrBlobPtr& rhs)
+{
+	return lhs.curr == rhs.curr && (lhs.ptr.lock() == rhs.ptr.lock());
+}
+
+bool operator!=(const StrBlobPtr& lhs, const StrBlobPtr& rhs)
+{
+	return !(lhs == rhs);
+}
+
+bool operator<(const StrBlobPtr& lhs, const StrBlobPtr& rhs)
+{
+	return (lhs.ptr.lock() < rhs.ptr.lock());
+}
 
 shared_ptr<vector<string>> StrBlobPtr::check(vector<string>::size_type sz, const string& msg)
 {
@@ -153,6 +243,20 @@ void StrBlobPtr::incr()
 	check(curr + 1, "out of vec range");
 	++curr;
 }
+
+
+class StrBlobPtrPtr
+{
+public:
+	StrBlobPtrPtr(StrBlobPtr &  s) {
+		strBlobPtr = &s;
+	}
+	StrBlobPtr* operator->() {
+		return strBlobPtr;
+	}
+private:
+	StrBlobPtr* strBlobPtr;
+};
 
 
 shared_ptr<vector<int>> make_int_vec()
@@ -210,21 +314,26 @@ void f(destination& d)
 
 int main()
 {
-	//StrBlob b1= { "yu", "fei", "ran" }, b2,b3;
-	//b2 = b1;
-	//b3 = { "yu", "fei", "ran" ,"1999"}; 
+	StrBlob b1= { "yu", "fei", "ran" }, b2,b3;
+	b2 = b1;
+	b3 = { "yu", "fei", "ran" ,"1999"}; 
 
-	//b2.push("ddd");
-	//cout << "b1:";
-	//b1.show();
-	//cout << endl;
-	//cout << "b2:";
-	//b2.show();
-	//cout << endl;
-	//b3.show();       
-	//cout << endl;
+	b2.push("ddd");
+	cout << "b1:";
+	b1.show();
+	cout << endl;
+	cout << "b2:";
+	b2.show();
+	cout << endl;
+	b3.show();       
+	cout << endl;
 
-	//StrBlobPtr pb(b1,0);
+	StrBlobPtr pb(b1,0);
+	cout << *pb << endl;
+	cout << pb->size() << endl;
+	StrBlobPtrPtr ppb(pb);
+	ppb->incr();
+	cout << ppb->operator*() << endl;
 
 	//cout << pb.deref() << endl;
 	//pb.incr();
@@ -257,25 +366,25 @@ int main()
 
 	//unique_ptr<int>a(10);
 
-	StrBlob b;
-	ifstream ifs("raw.txt");
-	string str;
-	int count = 0;
-	while (ifs >> str) {
-		b.push(str);
-		count++;
-	}
-	StrBlobPtr pb(b,0);
-	for (int i = 0; i < count; i++) {
-		cout << pb.deref() << endl;
-		if (i != count - 1)pb.incr();
-	}
-	const StrBlob b1(b);
-	ConstStrBlobPtr pb1(b1,0);
-	for (int i = 0; i < count; i++) {
-		cout << pb1.deref() << endl;
-		if (i != count - 1)pb1.incr();
-	}
+	//StrBlob b;
+	//ifstream ifs("raw.txt");
+	//string str;
+	//int count = 0;
+	//while (ifs >> str) {
+	//	b.push(str);
+	//	count++;
+	//}
+	//StrBlobPtr pb(b,0);
+	//for (int i = 0; i < count; i++) {
+	//	cout << pb.deref() << endl;
+	//	if (i != count - 1)pb.incr();
+	//}
+	//const StrBlob b1(b);
+	//ConstStrBlobPtr pb1(b1,0);
+	//for (int i = 0; i < count; i++) {
+	//	cout << pb1.deref() << endl;
+	//	if (i != count - 1)pb1.incr();
+	//}
 
 	return 0;
 }

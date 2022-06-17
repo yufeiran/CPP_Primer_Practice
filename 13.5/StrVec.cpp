@@ -192,3 +192,30 @@ void StrVec::clear()
 		alloc.destroy(--free_start);
 	}
 }
+
+
+bool operator==(const StrVec& lhs, const StrVec& rhs)
+{
+	return lhs.elm_start == rhs.elm_start && lhs.free_start == rhs.free_start && lhs.free_end == rhs.free_end;
+
+}
+
+bool operator!=(const StrVec& lhs, const StrVec& rhs)
+{
+	return !(lhs == rhs);
+
+}
+
+bool operator<(const StrVec& lhs, const StrVec& rhs)
+{
+	auto lhs_elm = lhs.elm_start;
+	auto rhs_elm = rhs.elm_start;
+	while (lhs_elm != lhs.free_start && rhs_elm != rhs.free_start) {
+		if (*lhs_elm > *rhs_elm) {
+			return false;
+		}
+		if (lhs_elm != lhs.free_start)lhs_elm++;
+		if (rhs_elm != rhs.free_start)rhs_elm++;
+	}
+	return true;
+}

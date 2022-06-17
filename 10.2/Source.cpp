@@ -47,13 +47,22 @@ bool check_size(const string& s, string::size_type sz)
 }
 
 
+class cmp_size
+{
+public:
+	bool operator()(const string& s, size_t size) {
+		return s.size() >= size;
+	}
+};
+
 void biggies1(vector<string>& words,
 	vector<string>::size_type sz)
 {
 	elimDups(words);
 	stable_sort(words.begin(), words.end(), cmpStr);
 	//auto ws = find_if(words.begin(), words.end(), [sz](const string& s) {return s.size() >= sz; });
-	auto ws = stable_partition(words.begin(), words.end(), bind(check_size,_1,sz));
+	//auto ws = stable_partition(words.begin(), words.end(), bind(check_size,_1,sz));
+	auto ws = stable_partition(words.begin(), words.end(), bind(cmp_size(), _1, sz));
 	cout << "sum:" <<  ws-words.begin() << endl;
 	for_each(words.begin(), ws, strOut);
 	cout << endl;

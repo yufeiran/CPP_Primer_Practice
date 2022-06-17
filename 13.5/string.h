@@ -7,6 +7,8 @@
 
 class string
 {
+	friend bool operator<(const string& lhs, const string& rhs);
+	friend bool operator==(const string& lhs, const string& rhs);
 public:
 	string() :elm_start(nullptr), free_start(nullptr), free_end(nullptr) {};
 	string(const string& s);
@@ -14,9 +16,14 @@ public:
 	string(string&& s)noexcept;
 	string& operator=(const string& s);
 	string& operator=(string&& s)noexcept;
+	char& operator[](size_t n) { return *(elm_start + n); }
+	const char& operator[](size_t n)const { return *(elm_start + n); }
+	
 	size_t size();
 	size_t capacity();
 	bool empty();
+	const char* cbegin()const { return elm_start; };
+	const char* cend()const { return free_start; };
 	char* begin();
 	char* end(); 
 	char* at(size_t pos);
@@ -35,6 +42,39 @@ private:
 	char* free_start;
 	char* free_end;
 };
+
+bool operator==(const string& lhs, const string& rhs)
+{
+	return lhs.elm_start == rhs.elm_start && lhs.free_start == rhs.free_start && lhs.free_end == rhs.free_end;
+}
+
+bool operator!=(const string& lhs, const string& rhs)
+{
+	return !(lhs == rhs);
+}
+
+bool operator<(const string& lhs, const string& rhs)
+{
+	auto lhs_elm = lhs.elm_start;
+	auto rhs_elm = rhs.elm_start;
+	while (lhs_elm != lhs.free_start && rhs_elm != rhs.free_start) {
+		if (*lhs_elm > *rhs_elm) {
+			return false;
+		}
+		if (lhs_elm != lhs.free_start)lhs_elm++;
+		if (rhs_elm != rhs.free_start)rhs_elm++;
+	}
+	return true;
+}
+
+std::ostream& operator<<(std::ostream& os, const string& s)
+{
+	for (auto it = s.cbegin(); it != s.cend(); it++) {
+		os << *it;
+	}
+	return os;
+}
+
 
 string& string::operator=(const string& s)
 {

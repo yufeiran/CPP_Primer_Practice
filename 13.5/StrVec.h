@@ -7,6 +7,8 @@
 
 class StrVec
 {
+	friend bool operator==(const StrVec& lhs, const StrVec& rhs);
+	friend bool operator<(const StrVec& lhs, const StrVec& rhs);
 public:
 	StrVec() :elm_start(nullptr), free_start(nullptr), free_end(nullptr) {};
 	StrVec(const StrVec& s);
@@ -14,6 +16,8 @@ public:
 	StrVec(std::initializer_list<std::string> slist);
 	StrVec& operator=(const StrVec& s);
 	StrVec& operator=(StrVec&& s) noexcept;
+	std::string& operator[](size_t n) { return *(elm_start+n); }
+	const std::string& operator[](size_t n)const { return *(elm_start + n); }
 	~StrVec() { free(); };
 	void push_back(const std::string&s);
 	void pop_back();
@@ -37,3 +41,7 @@ private:
 	std::string* free_start;
 	std::string* free_end;
 };
+
+bool operator==(const StrVec& lhs, const StrVec& rhs);
+bool operator!=(const StrVec& lhs, const StrVec& rhs);
+bool operator<(const StrVec& lhs, const StrVec& rhs);
