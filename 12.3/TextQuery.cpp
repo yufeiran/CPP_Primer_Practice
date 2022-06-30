@@ -6,7 +6,8 @@ void TextQuery::loadFile(ifstream& infile)
 {
 	nowfile = &infile;
 	wordMap.clear();
-	lineData = make_shared<StrVec>();
+	shared_ptr<StrVec>temp(new StrVec, DebugDelete());
+	lineData = temp;
 	lineData->clear();
 	string line;
 	int lineCurr = 0;
@@ -16,7 +17,7 @@ void TextQuery::loadFile(ifstream& infile)
 		string word;
 		while (istr >> word) {
 			if (wordMap.find(word) == wordMap.end()) {
-				wordMap[word] =make_shared<set<int>>( set<int>{ lineCurr });
+				wordMap[word] = shared_ptr<set<int>>(new set<int>{ lineCurr }, DebugDelete());
 				wordCount[word] = 1;
 			}
 			else {
@@ -35,7 +36,7 @@ QueryResult TextQuery::query(const string& word) const
 	result.word = word;
 
 	if (wordMap.find(word) == wordMap.end()) {
-		result.resultSet = make_shared<set<int>>();
+		result.resultSet = shared_ptr<set<int>>(new set<int>, DebugDelete());
 		return result;
 	}
 	result.count = wordCount.find(word)->second;

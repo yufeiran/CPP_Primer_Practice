@@ -38,6 +38,10 @@ int main()
 	for (auto it = sVec1.begin(); it != sVec1.end(); it++) {
 		cout << *it << endl;
 	}
+
+	StrVec newV;
+	newV.emplace_back(10, 'c');
+	cout << newV[0] << endl;
 	return 0;
 }
 

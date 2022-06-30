@@ -30,6 +30,7 @@ public:
 	void resize(size_t new_size);
 	bool empty();
 	void clear();
+	template<class ...Args>void emplace_back(Args&&...);
 private:
 	void check_range(size_t index,const std::string &msg);
 	void check_size() { if (size() == capacity())reallocate(); };
@@ -45,3 +46,11 @@ private:
 bool operator==(const StrVec& lhs, const StrVec& rhs);
 bool operator!=(const StrVec& lhs, const StrVec& rhs);
 bool operator<(const StrVec& lhs, const StrVec& rhs);
+
+template<class ...Args>
+inline 
+void StrVec::emplace_back(Args&&...args)
+{
+	check_size();
+	alloc.construct(free_start++, std::forward<Args>(args)...);
+}

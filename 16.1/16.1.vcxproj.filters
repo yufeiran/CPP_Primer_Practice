@@ -18,27 +18,27 @@
     <ClCompile Include="源.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TextQuery.cpp">
+    <ClCompile Include="blob.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="StrBlob.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="StrVec.cpp">
+    <ClCompile Include="Vec.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TextQuery.h">
+    <ClInclude Include="Blob.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="StrBlob.h">
+    <ClInclude Include="screen.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="StrVec.h">
+    <ClInclude Include="Vec.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DebugDelete.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MyMemory.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

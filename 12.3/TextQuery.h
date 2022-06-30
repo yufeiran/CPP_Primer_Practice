@@ -9,7 +9,7 @@
 #include<sstream>
 #include"StrBlob.h" 
 #include"StrVec.h"
-
+#include"DebugDelete.h"
 using namespace std;
 
 class QueryResult;
