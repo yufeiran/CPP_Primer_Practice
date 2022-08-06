@@ -47,6 +47,27 @@ QueryResult TextQuery::query(const string& word) const
 	return result;
 }
 
+tuple<string, int, shared_ptr<set<int>>, shared_ptr<StrVec>, ifstream*> TextQuery::query1(const string& word) const
+{
+
+	QueryResult result;
+	result.word = word;
+
+	if (wordMap.find(word) == wordMap.end()) {
+		result.resultSet = shared_ptr<set<int>>(new set<int>, DebugDelete());
+		return tuple<string, int, shared_ptr<set<int>>, shared_ptr<StrVec>, ifstream*>(result.word, result.count, result.resultSet, result.lineData, result.nowfile);
+	}
+	result.count = wordCount.find(word)->second;
+	result.resultSet = wordMap.find(word)->second;
+	result.lineData = lineData;
+	result.nowfile = nowfile;
+
+	
+
+	return tuple<string, int, shared_ptr<set<int>>, shared_ptr<StrVec>, ifstream*>(result.word, result.count, result.resultSet, result.lineData, result.nowfile);
+
+}
+
 
 
 ostream& print(ostream& os, const QueryResult& q)

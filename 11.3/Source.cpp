@@ -56,11 +56,7 @@ void transform_text(ifstream& rule, ifstream& raw)
 			cout << translate(nowStr, rule_map);
 		}
 		cout << endl;
-
-
 	}
-
-
 }
 
 int main()

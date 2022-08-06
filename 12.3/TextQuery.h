@@ -7,6 +7,7 @@
 #include<memory>
 #include<fstream>
 #include<sstream>
+#include<tuple>
 #include"StrBlob.h" 
 #include"StrVec.h"
 #include"DebugDelete.h"
@@ -22,6 +23,7 @@ public:
 	TextQuery(ifstream& infile) {  loadFile(infile); };
 	void loadFile(ifstream& infile);
 	QueryResult query(const string& word) const;
+	tuple<string,int, shared_ptr<set<int>>, shared_ptr<StrVec>, ifstream*>query1(const string& word) const;
 private:
 	shared_ptr<StrVec>lineData;
 	map<string, shared_ptr<set<int>>>wordMap;

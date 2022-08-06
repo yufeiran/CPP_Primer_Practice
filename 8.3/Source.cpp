@@ -3,6 +3,7 @@
 #include<fstream>
 #include<string>
 #include<vector>
+#include<regex>
 using namespace std;
 
 
@@ -22,12 +23,33 @@ struct PersonInfo
 	vector<string> phones;
 };
 
+bool valid(const smatch& m)
+{
+	if (m[1].matched)
+		return m[3].matched
+		&& (m[4].matched == 0 || m[4].str() == " ");
+	else
+		return !m[3].matched
+		&& m[4].str() == m[6].str();
+}
+
 bool vaild(string s)
 {
-	for (auto c : s) {
-		if (!isdigit(c))return false;
+	regex r("(\\()?(\\d{3})(\\))?([ .-])*(\\d{3})([-. ])*(\\d{4})");
+
+	smatch m;
+	while (getline(cin, s)) {
+		for (sregex_iterator it(s.begin(), s.end(), r), it_end; it != it_end; it++)
+		{
+			if (valid(*it))
+			{
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
 	}
-	return true;
 }
 
 string format(string s)
@@ -80,12 +102,22 @@ int main(int argc,char *argv[])
 	
 	for (const auto& entry : people) {
 		ostringstream formatted, badNums;
+		bool firstFlag = true;
 		for (const auto& nums : entry.phones) {
 			if (!vaild(nums)) {
 				badNums << " " << nums;
 			}
 			else
+			{
+				//if (firstFlag == false) {
+				//	formatted << " " << format(nums);
+				//	break;
+				//}
+				firstFlag = false;
 				formatted << " " << format(nums);
+				//break;
+			}
+
 		}
 		if (badNums.str().empty()) {
 			os << entry.name << " "
