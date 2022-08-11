@@ -35,7 +35,7 @@ string debug_rep(T* p)
 
 
 
-string debug_rep(const string& s)
+string debug_rep(const string& s) noexcept
 {
 	return '"' + s + '"';
 }

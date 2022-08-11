@@ -74,5 +74,12 @@ int main()
 	cout << count_(dvec, 1.2) << endl;
 	cout << count_(svec, string("yu")) << endl;
 	cout << count_(cvec, "yu") << endl;
+	try {
+		umap["yu"] + umap["dd"];
+	}
+	catch (isbn_mismatch e) {
+		cout << e.what() << " left:" << e.left << " right:" << e.right << endl;
+	}
+
 	return 0;
 }

@@ -43,6 +43,7 @@ public:
 private:
 	::shared_ptr<std::vector<T>>data;
 	void check(size_t i, const std::string& msg)const;
+
 };
 
 
@@ -53,11 +54,12 @@ Blob<T>::Blob() :data(std::make_shared<std::vector<T>>())
 }
 
 template<typename T>
-Blob<T>::Blob(std::initializer_list<T> il) :
+Blob<T>::Blob(std::initializer_list<T> il)try :
 	data(new std::vector<T>(il))
 {
 
 }
+catch (const std::bad_alloc& e) {};
 
 template<typename T>
 template<typename IT>

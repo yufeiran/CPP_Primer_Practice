@@ -5,6 +5,23 @@
 #include<iostream>
 #include<string>
 #include<unordered_map>
+#include<exception>
+
+class out_of_stock :public std::runtime_error {
+public:
+	explicit out_of_stock(const std::string &s):
+		std::runtime_error(s) {}
+};
+
+class isbn_mismatch :public std::logic_error {
+public:
+	explicit isbn_mismatch(const std::string &s):
+		std::logic_error(s) {}
+	isbn_mismatch(const std::string& s,
+		const std::string& lhs, const std::string& rhs) :
+		std::logic_error(s), left(lhs), right(rhs) {}
+	const std::string left, right;
+};
 
 template<class T>class std::hash;
 class Sales_data
@@ -70,6 +87,9 @@ size_t hash<Sales_data>::operator()(const Sales_data& s)const
 using namespace std;
 Sales_data& Sales_data::combine(const Sales_data& other)
 {
+	if (this->isbn() != other.isbn()) {
+		throw isbn_mismatch("wrong isbns", isbn(), other.isbn());
+	}
 	units_sold += other.units_sold;
 	revenue += other.revenue;
 
@@ -106,6 +126,7 @@ std::ostream& print(std::ostream& os, const Sales_data& item)
 
 Sales_data add(const Sales_data& lhs, const Sales_data& rhs)
 {
+
 	Sales_data ans = lhs;
 	ans.combine(rhs);
 
@@ -132,6 +153,7 @@ std::istream& operator>>(std::istream& is, Sales_data& s)
 
 Sales_data& Sales_data::operator+=(const Sales_data& s)
 {
+
 	*this = *this + s;
 	return *this;
 }

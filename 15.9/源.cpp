@@ -2,7 +2,7 @@
 #include<fstream>
 #include<iostream>
 using namespace std;
-
+using namespace chapter15;
 int main()
 {
 	Query q = Query("fiery") & Query("bird") | Query("wind");
