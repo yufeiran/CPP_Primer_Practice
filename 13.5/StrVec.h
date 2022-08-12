@@ -4,6 +4,8 @@
 #include<exception>
 #include<stdexcept>
 #include<initializer_list>
+#include<cstdlib>
+#include<iostream>
 
 class StrVec
 {

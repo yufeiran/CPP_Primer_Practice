@@ -62,6 +62,9 @@ string debug_rep(const char* p)
 
 int main()
 {
+
+	const std::string Sales_data::*pdata = Sales_data::BOOKNO();
+
 	unordered_map<string, Sales_data> umap;
 	umap["yu"]= Sales_data("yu", 1, 4);
 	umap["dd"] = Sales_data("dd", 122, 34);

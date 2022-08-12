@@ -5,6 +5,8 @@
 #include<iostream>
 #include<initializer_list>
 
+
+
 class string
 {
 	friend bool operator<(const string& lhs, const string& rhs);

@@ -1,6 +1,7 @@
 #include"Query.h"
 #include<fstream>
 #include<iostream>
+#include<typeinfo>
 using namespace std;
 using namespace chapter15;
 int main()
@@ -10,6 +11,12 @@ int main()
 	ifstream in("story.txt");
 	TextQuery text(in);
 	print(cout, q.eval(text));
+
+	Query* Q1 = new Query("wind");
+	
+	if (typeid(Q1) == typeid(Query*)) {
+		cout << "equal" << endl;
+	}
 
 
 	print(cout, Query("Daddy").eval(text));

@@ -13,12 +13,15 @@
 #include"DebugDelete.h"
 using namespace std;
 
-class QueryResult;
 
 class TextQuery
 {
-	friend QueryResult;
+
+
 public:
+	class QueryResult;
+	friend QueryResult;
+
 	TextQuery():nowfile(nullptr) {};
 	TextQuery(ifstream& infile) {  loadFile(infile); };
 	void loadFile(ifstream& infile);
@@ -31,7 +34,7 @@ private:
 	ifstream* nowfile;
 };
 
-class QueryResult
+class TextQuery::QueryResult
 {
 public:
 	string word;
@@ -43,5 +46,4 @@ public:
 	ifstream* get_file();
 	ifstream* nowfile;
 };
-
-ostream& print(ostream& os, const QueryResult& q);
+ostream& print(ostream& os, const TextQuery::QueryResult& q);

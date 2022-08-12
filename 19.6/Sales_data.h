@@ -9,13 +9,13 @@
 
 class out_of_stock :public std::runtime_error {
 public:
-	explicit out_of_stock(const std::string &s):
+	explicit out_of_stock(const std::string& s) :
 		std::runtime_error(s) {}
 };
 
 class isbn_mismatch :public std::logic_error {
 public:
-	explicit isbn_mismatch(const std::string &s):
+	explicit isbn_mismatch(const std::string& s) :
 		std::logic_error(s) {}
 	isbn_mismatch(const std::string& s,
 		const std::string& lhs, const std::string& rhs) :
@@ -54,7 +54,7 @@ private:
 	double avg_price() const;
 	using AVG =
 		double (Sales_data::*)() const;
-	                      
+
 	std::string bookNo;
 	unsigned units_sold = 0;
 	double revenue = 0.0;
@@ -73,18 +73,18 @@ std::istream& operator>>(std::istream& is, Sales_data& s);
 #ifndef HEADER
 #define HEADER
 namespace std {
-template<>
-struct hash<Sales_data>
-{
-	typedef size_t result_type;
-	typedef Sales_data argument_type;
-	size_t operator()(const Sales_data& s) const;
-};
-size_t hash<Sales_data>::operator()(const Sales_data& s)const
-{
-	return hash<string>()(s.bookNo) ^
-		hash<unsigned>()(s.units_sold) ^ hash<double>()(s.revenue);
-}
+	template<>
+	struct hash<Sales_data>
+	{
+		typedef size_t result_type;
+		typedef Sales_data argument_type;
+		size_t operator()(const Sales_data& s) const;
+	};
+	size_t hash<Sales_data>::operator()(const Sales_data& s)const
+	{
+		return hash<string>()(s.bookNo) ^
+			hash<unsigned>()(s.units_sold) ^ hash<double>()(s.revenue);
+	}
 }
 #endif //HEADER
 
@@ -168,3 +168,4 @@ Sales_data& Sales_data::operator=(const std::string& str)
 	bookNo = str;
 	return *this;
 }
+#pragma once

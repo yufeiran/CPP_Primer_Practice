@@ -1,7 +1,21 @@
-#include"StrVec.h"
+
 #include <algorithm>
 #include<iostream>
+#include"StrVec.h"
 using namespace std;
+
+void* operator new(size_t size) {
+	std::cout << "void* operator new(size_t size) call!" << std::endl;
+	if (void* mem = malloc(size))
+		return mem;
+	else
+		throw std::bad_alloc();
+}
+
+void operator delete(void* mem) {
+	std::cout << "void operator delete(void* mem) call!" << std::endl;
+	free(mem);
+}
 
 //分配新的空间
 void StrVec::reallocate()

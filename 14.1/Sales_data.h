@@ -29,8 +29,9 @@ public:
 	operator double() { return revenue; }
 	std::string isbn() const { return bookNo; }
 	Sales_data& combine(const Sales_data&);
-private:
 	double avg_price() const;
+private:
+
 
 	std::string bookNo;
 	unsigned units_sold = 0;

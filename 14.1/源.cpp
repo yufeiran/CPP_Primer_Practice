@@ -3,6 +3,7 @@
 #include<tuple>
 #include<algorithm>
 #include<vector>
+#include<functional>
 using namespace std;
 
 vector<vector<Sales_data>> file;
@@ -80,6 +81,11 @@ vector<matches2> findBook2(const vector<vector<Sales_data>>& file, const string&
 
 }
 
+bool isGreaterThan( Sales_data s ,double price)
+{
+	if (s.avg_price() > price)return true;
+	return false;
+}
 
 int main()
 {
@@ -99,6 +105,8 @@ int main()
 	cout << s1 << endl;
 	cout << s2 << endl;
 	cout << s1 + s2 << endl;
+	auto it = find_if(ss2.begin(), ss2.end(), bind(&isGreaterThan, placeholders::_1, 1));
+	cout <<"ans " << *it << endl;
 	//Sales_data s3;
 	//cin >> s3;
 	//cout << s3 << endl;
@@ -108,6 +116,7 @@ int main()
 	auto ret = findBook(file, s);
 	auto ret1 = findBook1(file, s);
 	auto ret2 = findBook2(file, s);
+
 	while (1);
 
 	return 0;

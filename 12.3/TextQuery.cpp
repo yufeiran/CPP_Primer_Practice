@@ -30,7 +30,7 @@ void TextQuery::loadFile(ifstream& infile)
 	return;
 }
 
-QueryResult TextQuery::query(const string& word) const
+TextQuery::QueryResult TextQuery::query(const string& word) const
 {
 	QueryResult result;
 	result.word = word;
@@ -70,7 +70,7 @@ tuple<string, int, shared_ptr<set<int>>, shared_ptr<StrVec>, ifstream*> TextQuer
 
 
 
-ostream& print(ostream& os, const QueryResult& q)
+ostream& print(ostream& os, const TextQuery::QueryResult& q)
 {
 	os << q.word << " occurs " << q.count <<((q.count>1)? " times":" time" )<< endl;
 
@@ -80,17 +80,17 @@ ostream& print(ostream& os, const QueryResult& q)
 	return os;
 }
 
-set<int>::iterator QueryResult::begin()
+set<int>::iterator TextQuery::QueryResult::begin()
 {
 	return (*resultSet).begin();
 }
 
-set<int>::iterator QueryResult::end()
+set<int>::iterator TextQuery::QueryResult::end()
 {
 	return (*resultSet).end();
 }
 
-ifstream* QueryResult::get_file()
+ifstream* TextQuery::QueryResult::get_file()
 {
 	return nowfile;
 }
